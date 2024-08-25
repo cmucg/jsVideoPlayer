@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        /* Hide the control */
+        video::-webkit-media-controls {
+            display: none !important;
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        video.show-controls::-webkit-media-controls {
+            display: flex !important;
+            opacity: 1;
+            pointer-events: auto;
+        }
+    </style>
+</head>
+<body>
+    <!-- Select local video file -->
+    <input type="file" id="cgInputF" accept="video/*"> <br>
+    <video id="cgVideo" controls></video>
+
+    <script>
+
+        var cgVideo = document.getElementById('cgVideo')
+        var cgVideoRect
+        cgVideo.onmousemove = (e) => {
+            cgVideoRect = cgVideo.getBoundingClientRect()
+            const videoBottom = cgVideoRect.top+cgVideoRect.height
+            if (videoBottom - e.clientY < 100) { // when distance between mouse and bottom < 100px
+                cgVideo.classList.add('show-controls')  // show control
+            } else {
+                cgVideo.classList.remove('show-controls') // hide control
+            }
+        }
+
+        cgVideo.onmouseleave = (e) => {
+            cgVideo.classList.remove('show-controls') // when mouse leaves the video, hide control
+        }
+
+        var cgFiles, cgURL
+        var cgInputF = document.getElementById('cgInputF')
+        cgInputF.onchange = (e)=>{
+            cgFiles = cgInputF.files
+            if (cgFiles.length<=0) return
+            cgURL = URL.createObjectURL(cgFiles[0])
+            cgVideo.src = cgURL
+            cgVideo.load()
+            cgVideo.play()
+        }
+
+
+    </script>
+</body>
+</html>
