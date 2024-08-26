@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        /* Hide the control */
+        video::-webkit-media-controls {
+            display: none !important;
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        video.show-controls::-webkit-media-controls {
+            display: flex !important;
+            opacity: 1;
+            pointer-events: auto;
+        }
+    </style>
+</head>
+<body id="bd1">
+    <!-- Select local video file -->
+    <input type="file" id="cgInputF" accept="video/*"> <br>
+    <div id="div1">
+        <video id="cgVideo" controls></video>
+    </div>
+    <script>
+        var bd1=document.getElementById('bd1')
+        var div1=document.getElementById('div1')
+        var cgVideo = document.getElementById('cgVideo')
+        var cgVideoRect
+        cgVideo.onmousemove = (e) => {
+            cgVideoRect = cgVideo.getBoundingClientRect()
+            const videoBottom = cgVideoRect.top+cgVideoRect.height
+            if (videoBottom - e.clientY < 100) { // when distance between mouse and bottom < 100px
+                cgVideo.classList.add('show-controls')  // show control
+            } else {
+                cgVideo.classList.remove('show-controls') // hide control
+            }
+        }
+
+        cgVideo.onmouseleave = (e) => {
+            cgVideo.classList.remove('show-controls') // when mouse leaves the video, hide control
+        }
+
+        var cgFiles, cgURL
+        var cgInputF = document.getElementById('cgInputF')
+        cgInputF.onchange = (e)=>{
+            cgFiles = cgInputF.files
+            if (cgFiles.length<=0) return
+            cgURL = URL.createObjectURL(cgFiles[0])
+            cgVideo.src = cgURL
+            cgVideo.load()
+            cgVideo.play()
+        }
+
+        
+var ratio=100, angle=0
+var transX=0, transY=0
+var mouseX0, mouseY0, mouseX, mouseY, div1rect
+
+var f0=function(e){e.preventDefault()}
+bd1.oncontextmenu=f0
+
+var cgLeftClick=false // different left-mouse-button click or drag, rotate
+var f1=function(e){
+    e.preventDefault()
+    ee=e
+    // console.log(e)
+    if(e.button==0){ // left mouse button
+        mouseX0=e.screenX
+        mouseY0=e.screenY
+        cgLeftClick=true
+    }
+    if(e.button==1){ // middle-mouse-button to move the image-center to the center of its container
+        div1rect = div1.getBoundingClientRect()
+        transX = (div1rect.left+div1rect.right)/2 - cgVideo.offsetWidth/2
+        transY = (div1rect.top+div1rect.bottom)/2 - cgVideo.offsetHeight/2
+        ratio = 100*(div1rect.bottom-div1rect.top)/cgVideo.offsetHeight
+        // transX = e.screenX - img1.offsetWidth/2
+        // transY = e.screenY - img1.offsetHeight/2
+        cgVideo.style.transform=`translate(${transX}px,${transY}px) scale(${ratio/100}) rotateZ(${angle}deg)`
+    }
+    // imgTop=parseInt(img1.style.top)
+    // imgLeft=parseInt(img1.style.left)
+    // imgX=img1.offsetLeft
+    // imgY=img1.offsetTop
+    // console.log(typeof(imgX))
+    // console.log(imgX,imgY)
+    // console.log(imgLeft,imgTop)
+}
+bd1.onmousedown=f1
+
+var cgVideoPlaying = true
+var f2=function(e){
+    if(!cgLeftClick) return
+
+    if(cgVideoPlaying) cgVideo.pause()
+    else cgVideo.play()
+    cgVideoPlaying = ! cgVideoPlaying
+    cgLeftClick=false // one up is one
+}
+cgVideo.onmouseup=f2
+
+var f3=function(e){
+    cgLeftClick=false  // dragging is not click
+    e.preventDefault()
+    if(e.buttons!==1){ return }
+    ee=e
+    mouseX=e.screenX
+    mouseY=e.screenY
+    transX += (mouseX-mouseX0) //3
+    transY += (mouseY-mouseY0) //3
+
+    cgVideo.style.transform=`translate(${transX}px,${transY}px) scale(${ratio/100}) rotateZ(${angle}deg)`
+    mouseX0=mouseX; mouseY0=mouseY;
+    }
+bd1.onmousemove=f3
+
+var f4=function(e){
+    e.preventDefault()
+    cgLeftClick=false  // doubleClick is not click
+    ee=e
+    // console.log(e)
+    
+    if (document.fullscreenElement!==div1){
+        div1.requestFullscreen()
+    }
+    // else{
+    //     document.exitFullscreen()
+    // }
+}
+bd1.ondblclick=f4
+
+var cgTotleTime, cgCurrentTime, cgJumpTime=2 // time-unit is second
+var f5=function(e){
+    e.preventDefault()
+    cgLeftClick=false  // rotating is not click
+    // console.log(e)
+    if(e.buttons==0){ // only wheel 
+        cgTotleTime = cgVideo.duration
+        cgCurrentTime = cgVideo.currentTime
+        if(e.deltaY>0) cgVideo.currentTime = cgCurrentTime-cgJumpTime>0 ? cgCurrentTime-cgJumpTime : 0
+        else cgVideo.currentTime = cgCurrentTime+cgJumpTime<cgTotleTime ? cgCurrentTime+cgJumpTime : cgTotleTime
+    }
+    if(e.buttons==1){ // wheel with left mouse button down
+        if(e.deltaY>0){angle+=5}
+        else{angle-=5}
+        // img1.style.transformOrigin=`${e.screenX}px ${e.screenY}px`
+        cgVideo.style.transform=`translate(${transX}px,${transY}px) scale(${ratio/100}) rotateZ(${angle}deg)`
+    }
+    if(e.buttons==2){ // wheel with right mouse button down
+        if(e.deltaY<0){ratio*=1.2}
+        else{ratio/=1.2}
+        if(ratio<1){ratio=1}
+        if(90<ratio && ratio<110){ratio=100}
+        // img1.style.transformOrigin=`${mouseX}px ${mouseY}px`
+        cgVideo.style.transform=`translate(${transX}px,${transY}px) scale(${ratio/100}) rotateZ(${angle}deg)`
+    }
+
+}
+bd1.onwheel=f5
+
+
+    </script>
+</body>
+</html>
