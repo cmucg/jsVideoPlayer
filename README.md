@@ -7,3 +7,9 @@
 - Mouse-wheel with left-mouse-button held to rotate the video.
 - Mouse-wheel with right-mouse-button held to zoom the video.
 - Click mouse-wheel to fit the video to the screen-height.
+## From 027 on, added auto-hide buttons for jumping to the specified time-locations:
+- Move mouse to the upper-left coner, a button appears. Click the button and select an MP4 file in local disk. 
+- This softwear automatically finds out all the contents like "Get up 0H12M5S, go to school 1H5M27S, lunch 6H20M50S.mp4", 
+- and generates buttons like "Get up 0H12M5S" , "go to school 1H5M27S" , "lunch 6H20M50S". 
+- The buttons appears when mouse is closed to the left side. Click the button, jumps to the related time in the video.
+- 
