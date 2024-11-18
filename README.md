@@ -12,4 +12,3 @@
 - This softwear automatically finds out all the contents like "Get up 0H12M5S, go to school 1H5M27S, lunch 6H20M50S.mp4", 
 - and generates buttons like "Get up 0H12M5S" , "go to school 1H5M27S" , "lunch 6H20M50S". 
 - The buttons appears when mouse is closed to the left side. Click the button, jumps to the related time in the video.
-- 
