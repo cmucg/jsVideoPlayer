@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>jsVideoPlayer by ChenGuang</title>
+    <style>
+        /* show longer file-name */
+        body, html, div {
+            margin: 0;
+            padding: 0;
+            overflow: hidden; /* Prevent scrolling */
+        }
+        #div1 {
+            position: relative;
+            width: 100%;
+            height: 100vh; /* Full viewport height */
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background-color: #000;
+        }
+        #div2 {
+            position: absolute;
+            width: 100%;
+            /* bottom: 20px;  Adjust position closed to bottom */
+            top: 0px; /* Adjust position closed to top */
+            left: 0%;
+            transform: translateX(-0%);
+            display: flex;
+            flex-direction: column;
+            align-items: left;
+        }
+        video {
+            width: 100%;
+            max-height: calc(100vh - 0px); /* Adjust height to leave space for buttons */
+            /* object-fit: cover; */
+        }
+        #buttonsColumn {
+            position: relative;
+            /* bottom: 20px;  Adjust position closed to bottom */
+            /* top: 30px; Adjust position closed to top
+            left: 0%; */
+            transform: translateX(-0%);
+            display: flex;
+            flex-direction: column;
+            align-items: left;
+        }
+        #cgInputF{
+            width: 100%;
+            position: relative;
+            /* bottom: 20px;  Adjust position closed to bottom */
+            /* top: 0px; Adjust position closed to top
+            left: 0%; */
+        }
+        .columnMember {
+            width: fit-content;
+            margin: 0px 0px 2px 0px;
+            padding: 0px 4px;
+            background-color: rgba(0, 0, 0, 0.3);
+            color: rgba(0, 255, 0, 1); /* color: #000; */
+            border: none;
+            cursor: pointer;
+        }
+        /*
+        .columnMember:hover {
+            background-color: rgba(0, 0, 0, 0.2);
+            color: rgba(0, 255, 0, 1); 
+            color: #000; 
+        }*/
+    </style>
+</head>
+<body id="bd1">
+
+    <div id="div1">
+        <video id="cgVideo" controls></video>
+        <div id="div2">
+            <input type="file" id="cgInputF" class="columnMember" accept="video/*"> <!-- Select local video file -->
+            <div id="buttonsColumn"> <div id="timeDisplayer" class="columnMember"></div> </div>
+        </div>
+    </div>
+
+
+    <script>
+        // Regular expresssion allow English Chinese and other languages
+        var bd1=document.getElementById('bd1')
+        var div1=document.getElementById('div1')
+        var buttonsColumn=document.getElementById('buttonsColumn')
+        var cgInputF = document.getElementById('cgInputF')
+        var cgVideo = document.getElementById('cgVideo')
+        const timeDisplayer=document.getElementById("timeDisplayer")
+        var cgVideoRect
+        // cgVideo.onmousemove = (e) => {
+        //     cgVideoRect = cgVideo.getBoundingClientRect()
+        //     const videoBottom = cgVideoRect.top+cgVideoRect.height
+        //     const videoRight = cgVideoRect.left+cgVideoRect.width
+        //     if (videoBottom - e.clientY < 100 || videoRight-e.clientX<100 || e.clientX-cgVideoRect.left<100 || e.clientY-cgVideoRect.top<100) { // when distance between mouse and bottom < 100px
+        //         cgVideo.classList.add('show-controls')  // show control
+        //     } else {
+        //         cgVideo.classList.remove('show-controls') // hide control
+        //     }
+        // }
+
+        cgVideo.onmouseleave = (e) => {
+            cgVideo.classList.remove('show-controls') // when mouse leaves the video, hide control
+        }
+        function cgDisplayTime(){
+            let seconds=Math.round(cgVideo.currentTime)
+            const hours=Math.floor(seconds/3600)
+            seconds -= hours*3600
+            const minutes=Math.floor(seconds/60)
+            seconds -= minutes*60
+            timeDisplayer.textContent = `${hours}H${minutes}M${seconds}S`
+        }
+        // cgVideo.addEventListener('timeupdate',cgDisplayTime)
+        cgVideo.ontimeupdate = cgDisplayTime
+        timeDisplayer.onclick = (e)=>{navigator.clipboard.writeText(timeDisplayer.textContent)}
+
+        var cgFiles, cgFileName, cgMatches, cgURL
+        const re1=/([^,]*?)(\d+)H(\d+)M(\d+)S/g
+        cgInputF.onchange = (e)=>{
+            cgFiles = cgInputF.files
+            if (cgFiles.length<=0) return
+            cgURL = URL.createObjectURL(cgFiles[0])
+            cgVideo.src = cgURL
+            cgVideo.load()
+            cgVideo.play()
+            cgFileName=cgFiles[0].name
+            cgMatches = [...cgFileName.matchAll(re1)]
+            cgMatches.forEach((match) => {
+                const [fullMatch, title, hours, minutes, seconds] = match;
+                const cgButton = document.createElement('div');
+                cgButton.className = 'columnMember';
+                cgButton.textContent = fullMatch;
+
+                // Click button goto related time
+                cgButton.addEventListener('click', () => {
+                    const timeAsSeconds = parseInt(hours) * 3600 + parseInt(minutes) * 60 + parseInt(seconds);
+                    cgVideo.currentTime = timeAsSeconds;
+                });
+                buttonsColumn.appendChild(cgButton);
+            })
+        }
+
+        
+var ratio=100, angle=0
+var transX=0, transY=0
+var mouseX0, mouseY0, mouseX, mouseY, div1rect
+
+var f0=function(e){e.preventDefault()}
+bd1.oncontextmenu=f0
+
+var cgLeftClick=false // different left-mouse-button click or drag, rotate
+var f1=function(e){
+    e.preventDefault()
+    ee=e
+    // console.log(e)
+    if(e.button==0){ // left mouse button
+        mouseX0=e.screenX
+        mouseY0=e.screenY
+        cgLeftClick=true
+    }
+    if(e.button==1){ // middle-mouse-button to move the image-center to the center of its container
+        div1rect = div1.getBoundingClientRect()
+        transX = (div1rect.left+div1rect.right)/2 - cgVideo.offsetWidth/2
+        transY = (div1rect.top+div1rect.bottom)/2 - cgVideo.offsetHeight/2
+        ratio = 100*(div1rect.bottom-div1rect.top)/cgVideo.offsetHeight
+        // transX = e.screenX - img1.offsetWidth/2
+        // transY = e.screenY - img1.offsetHeight/2
+        cgVideo.style.transform=`translate(${transX}px,${transY}px) scale(${ratio/100}) rotateZ(${angle}deg)`
+    }
+    // imgTop=parseInt(img1.style.top)
+    // imgLeft=parseInt(img1.style.left)
+    // imgX=img1.offsetLeft
+    // imgY=img1.offsetTop
+    // console.log(typeof(imgX))
+    // console.log(imgX,imgY)
+    // console.log(imgLeft,imgTop)
+}
+bd1.onmousedown=f1
+
+var cgVideoPlaying = true
+var f2=function(e){
+    if(!cgLeftClick) return
+
+    if(cgVideoPlaying) cgVideo.pause()
+    else cgVideo.play()
+    cgVideoPlaying = ! cgVideoPlaying
+    cgLeftClick=false // one up is one
+}
+cgVideo.onmouseup=f2
+
+var f3=function(e){
+    cgLeftClick=false  // dragging is not click
+    // e.preventDefault()
+
+    const div1Rect=div1.getBoundingClientRect()
+    const cgVideoRect = cgVideo.getBoundingClientRect()
+    const videoBottom = cgVideoRect.top+cgVideoRect.height
+    const videoRight = cgVideoRect.left+cgVideoRect.width
+
+    if ( e.clientX-div1Rect.left<100 ) 
+    { // when distance between mouse and left < 100px
+        cgInputF.style.display="flex"       // show FileSelector
+        buttonsColumn.style.display="flex"  // show buttons
+    } 
+    else 
+    {
+        cgInputF.style.display="none"      // hide FileSelector
+        buttonsColumn.style.display="none" // hide buttons
+    }
+
+    if (videoBottom - e.clientY < 100 || videoRight-e.clientX<100 || e.clientX-cgVideoRect.left<100 || e.clientY-cgVideoRect.top<100) { // when distance between mouse and bottom < 100px
+        cgVideo.classList.add('show-controls')  // show control
+        return
+    } else {
+        cgVideo.classList.remove('show-controls') // hide control
+    }
+
+    if(e.buttons!==1){ return }
+    ee=e
+    mouseX=e.screenX
+    mouseY=e.screenY
+    transX += (mouseX-mouseX0) //3
+    transY += (mouseY-mouseY0) //3
+
+    cgVideo.style.transform=`translate(${transX}px,${transY}px) scale(${ratio/100}) rotateZ(${angle}deg)`
+    mouseX0=mouseX; mouseY0=mouseY;
+    }
+bd1.onmousemove=f3
+
+var f4=function(e){
+    e.preventDefault()
+    cgLeftClick=false  // doubleClick is not click
+    ee=e
+    // console.log(e)
+    
+    if (document.fullscreenElement!==div1){
+        div1.requestFullscreen()
+    }
+    // else{
+    //     document.exitFullscreen()
+    // }
+}
+bd1.ondblclick=f4
+
+var cgTotleTime, cgCurrentTime, cgJumpTime=2 // time-unit is second
+var f5=function(e){
+    // e.preventDefault()
+    cgLeftClick=false  // rotating is not click
+    // console.log(e)
+    if(e.buttons==0){ // only wheel, up--back
+        cgTotleTime = cgVideo.duration
+        cgCurrentTime = cgVideo.currentTime
+        if(e.deltaY<0) cgVideo.currentTime = cgCurrentTime-cgJumpTime>0 ? cgCurrentTime-cgJumpTime : 0
+        else cgVideo.currentTime = cgCurrentTime+cgJumpTime<cgTotleTime ? cgCurrentTime+cgJumpTime : cgTotleTime
+    }
+    if(e.buttons==1){ // wheel with left mouse button down
+        if(e.deltaY>0){angle+=5}
+        else{angle-=5}
+        // img1.style.transformOrigin=`${e.screenX}px ${e.screenY}px`
+        cgVideo.style.transform=`translate(${transX}px,${transY}px) scale(${ratio/100}) rotateZ(${angle}deg)`
+    }
+    if(e.buttons==2){ // wheel with right mouse button down
+        if(e.deltaY<0){ratio*=1.2}
+        else{ratio/=1.2}
+        if(ratio<1){ratio=1}
+        if(90<ratio && ratio<110){ratio=100}
+        // img1.style.transformOrigin=`${mouseX}px ${mouseY}px`
+        cgVideo.style.transform=`translate(${transX}px,${transY}px) scale(${ratio/100}) rotateZ(${angle}deg)`
+    }
+
+}
+bd1.onwheel=f5
+
+const styleSheet = document.styleSheets[0]; // get the first style-sheet
+styleSheet.insertRule(`
+        video::-webkit-media-controls {
+            display: none !important;
+            opacity: 0;
+            pointer-events: none;
+        }`, styleSheet.cssRules.length);  // hide control-bar
+
+styleSheet.insertRule(`
+        video.show-controls::-webkit-media-controls {
+            display: flex !important;
+            opacity: 1;
+            pointer-events: auto;
+        }`, styleSheet.cssRules.length);  // show control-bar
+
+    </script>
+</body>
+</html>
