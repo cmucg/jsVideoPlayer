@@ -16,3 +16,11 @@
 - Added a timeDisplayer to display the time of video. 
 - Click on the timeDisplayer to copy the time-string in it. 
 - Optimized div-div based dom-location-control.
+## From 037 on, Added text-input-area at the top to help writing title-time: 
+- When mouse is near the top, it appears. 
+- Choose an mp4 file, the file-name appears in the text-input-area. 
+- Right-click the text-input area, the present video-time like 1H23M7S is automatically added to the end of the text, 
+- The insert cursor is placed at the proper place for typing a title for the video-time. 
+- Press Enter-key, the text will be copied into clip-board and saved into LocalStorage of your Browser. 
+- You can rename the mp4 file with the text in clip-board. 
+- If the text-input-area is blank, pressing Enter-key, the content saved in LocalStorage of your Browser will appear in the text-input-area. 
