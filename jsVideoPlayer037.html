@@ -142,7 +142,7 @@
             cgVideo.classList.remove('show-controls') // when mouse leaves the video, hide control
         }
         cgVideo.ontimeupdate = ()=>{
-            let seconds=Math.round(cgVideo.currentTime)
+            let seconds= Math.floor(cgVideo.currentTime) // Math.round(cgVideo.currentTime)
             const hours=Math.floor(seconds/3600)
             seconds -= hours*3600
             const minutes=Math.floor(seconds/60)
