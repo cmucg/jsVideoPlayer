@@ -24,4 +24,4 @@
 - Press Enter-key, the text will be copied into clip-board and saved into LocalStorage of your Browser. 
 - You can rename the mp4 file with the text in clip-board. 
 - If the text-input-area is blank, pressing Enter-key, the content saved in LocalStorage of your Browser will appear in the text-input-area.
-- Use ";" not "," to seperate. So that "," can be used in titles. File name should be like "Get up 0H12M5S; go to school 1H5M27S; lunch 6H20M50S.mp4"
+- Use ";" not "," to seperate. So that "," can be used in titles. File name should be like "Get up 0H12M5S; go to school 1H5M27S; lunch 6H20M50S.mp4" to generates buttons like "Get up 0H12M5S" , "go to school 1H5M27S" , "lunch 6H20M50S".
