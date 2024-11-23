@@ -113,7 +113,7 @@
             event.preventDefault()
             let baseName, extName
             [baseName, extName] = splitFileName(cgInputText.value )
-            cgInputText.value = baseName + ',  ' + timeDisplayer.innerText +'.'+extName
+            cgInputText.value = baseName + ';  ' + timeDisplayer.innerText +'.'+extName
             // set input cursor position for typing more
             const cursorPosition = baseName.length +2;
             cgInputText.setSelectionRange(cursorPosition, cursorPosition);
@@ -152,7 +152,7 @@
         timeDisplayer.onclick = (e)=>{navigator.clipboard.writeText(timeDisplayer.textContent)}
 
         var cgFiles, cgFileName, cgMatches, cgURL
-        const re1=/([^,]*?)(\d+)H(\d+)M(\d+)S/g
+        const re1=/([^;]*?)(\d+)H(\d+)M(\d+)S/g
         cgInputF.onchange = (e)=>{
             cgFiles = cgInputF.files
             if (cgFiles.length<=0) return
