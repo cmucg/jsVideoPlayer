@@ -25,7 +25,10 @@
 - You can rename the mp4 file with the text in clip-board. 
 - If the text-input-area is blank, pressing Enter-key, the content saved in LocalStorage of your Browser will appear in the text-input-area.
 - Use ";" not "," to seperate. So that "," can be used in titles. File name should be like "Get up 0H12M5S; go to school 1H5M27S; lunch 6H20M50S.mp4" to generates buttons like "Get up 0H12M5S" , "go to school 1H5M27S" , "lunch 6H20M50S".
-## From 038 on: 
+## From 038 on : 
 - When time-bar is not visable, each mouse-wheel-step video-time goes back/forward 2 seconds; 
 - when mouse is near the screen-bottom each mouse-wheel-step video-time goes back/forward 10 seconds; 
 - when mouse is near the screen-top each mouse-wheel-step video-time goes back/forward 1 minutes.
+## From 039 on:
+- Fits both time format like 1H23M6, 0H58M0S, 0H0M52S and simple time-format like 2M3, 0M23, 5M0. So as to allow more time-titles in file-name
+- Press enter-key in the text-input-location, new time buttons will be generated, although you should rename the video-file to keep the new buttons.
