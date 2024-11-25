@@ -32,3 +32,5 @@
 ## From 039 on:
 - Fits both time format like 1H23M6, 0H58M0S, 0H0M52S and simple time-format like 2M3, 0M23, 5M0. So as to allow more time-titles in file-name
 - Press enter-key in the text-input-location, new time buttons will be generated, although you should rename the video-file to keep the new buttons.
+## From 041 on:
+- Use 2-row-text-area to replace the original 1-row-input-dom. More convenient in displaying and editing long file-name.
