@@ -34,3 +34,8 @@
 - Press enter-key in the text-input-location, new time buttons will be generated, although you should rename the video-file to keep the new buttons.
 ## From 041 on:
 - Use 2-row-text-area to replace the original 1-row-input-dom. More convenient in displaying and editing long file-name.
+## From 043 on, click the mouse wheel in the text:
+- Sort the titles by time. 
+- Simplify time format, removing "S" at the end, remove "0H" if the time is smaller than 1 hour.
+- Remove the blanks adjacent to ";".
+- If the text is longer than 230 (max length of file-name), split the text into 230 and the longer part. The buttons are based on the whole text.
