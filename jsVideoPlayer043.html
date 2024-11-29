@@ -104,10 +104,7 @@
         var cgVideoRect, ee
 
         // cgInputText.onclick = (e)=>{cgInputText.focus()}
-        const delRe = /(?<=\D)0H(?=\d{1,2}M\d)|(?<=\dM\d{1,2})S(?=[; \.])|\s+(?=;)|(?<=;)\s+/g
-        function shortenFileName(fileName){
-
-        }
+        const delRe = /(?<=\D)0H(?=\d{1,2}M\d)|(?<=\dM\d{1,2})S(?=[; \.])|\s+(?=;)|(?<=;)\s+/g  // remove 0H, S, blanks adjacent to ;
 
         function insertBlank(str0,beforeLoc){
             let str1=str0.replaceAll('\t','')
