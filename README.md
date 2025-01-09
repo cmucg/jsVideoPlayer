@@ -39,3 +39,7 @@
 - Simplify time format, removing "S" at the end, remove "0H" if the time is smaller than 1 hour.
 - Remove the blanks adjacent to ";".
 - If the text is longer than 230 (max length of file-name), split the text into 230 and the longer part. The buttons are based on the whole text.
+## from 045 on, when paused the mouse-wheel controls time at higher precision:
+- When the mouse is in most areas and time-bar is hidden, mouse-wheel controls time at 0.5 second step.
+- When mouse is near the bottom and the time-bar comes out, mouse-wheel controls time at 0.1 second step.
+- When mouse is near the top and the time-bar comes out, mouse-wheel controls time at 0.01 second step.
