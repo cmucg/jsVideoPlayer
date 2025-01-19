@@ -43,3 +43,7 @@
 - When the mouse is in most areas and time-bar is hidden, mouse-wheel controls time at 0.5 second step.
 - When mouse is near the bottom and the time-bar comes out, mouse-wheel controls time at 0.1 second step.
 - When mouse is near the top and the time-bar comes out, mouse-wheel controls time at 0.01 second step.
+## from 046 on, introduced play-again:
+- When the video is paused at the end, click with right-mouse-key to jump to the beginning and play.
+- Also simplified play/pause switch by testing cgVideo.paused.
+
