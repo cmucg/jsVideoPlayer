@@ -46,4 +46,6 @@
 ## from 046 on, introduced play-again:
 - When the video is paused at the end, click with right-mouse-key to jump to the beginning and play.
 - Also simplified play/pause switch by testing cgVideo.paused.
-
+## from 047 on: 
+- The video does not pause at the end, it loops to play again and again. 
+- Click the title-time input-box not only shortens the text, but also send the text to clip-board and local-storage.
